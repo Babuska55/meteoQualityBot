@@ -1,11 +1,15 @@
 import telebot 
 import requests
+from flask import Flask, request
+import os
 import json
 from datetime import datetime   
 from collections import defaultdict
 
 bot=telebot.TeleBot("7863228849:AAFU3bwjvTYPfKgHa1Ihapuyj0hzQUbzGgk")
 API='937ac758fd88de28beb4c24fbdc2fa63'
+
+app = Flask(__name__)
 
 def weather_icon(desc):
     desc = desc.lower()
@@ -39,7 +43,7 @@ def get_weather(message):
         data=json.loads(res.text)
         temp=data["main"]["temp"]
         bot.reply_to(message, f'Сейчас погода:{temp}°C')
-
+        
         # Картинка
         def get_image_file(description):
             description = description.lower()
@@ -56,8 +60,7 @@ def get_weather(message):
                 return 'fog.png'
             else:
                 return None  # if no match found
-
-
+            
         # Используем описание погоды для выбора изображения
         desc = data["weather"][0]["description"]
         image = get_image_file(desc)
@@ -105,4 +108,26 @@ def get_weather(message):
     else:   
         bot.reply_to(message, f'Город написан не верно.')
   
-bot.polling(none_stop=True)
+#bot.polling(none_stop=True)
+
+@app.route('/' + API, methods=['POST'])
+def webhook():
+    json_str = request.get_data().decode('UTF-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return "!", 200
+
+# Главная страница для теста
+@app.route('/')
+def index():
+    return "Hello World!", 200
+
+if __name__ == '__main__':
+    # Убираем polling() и настраиваем вебхук
+    bot.remove_webhook()
+    bot.set_webhook(url=f'https://meteoqualitybot.onrender.com/{API}')
+
+    
+    # Используем PORT из переменных окружения Render или указываем дефолтный порт 5000
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
