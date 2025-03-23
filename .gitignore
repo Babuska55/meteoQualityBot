@@ -1,0 +1,20 @@
+# Игнорируем системные файлы и папки
+AppData/
+Desktop/
+Documents/
+Downloads/
+Favorites/
+IntelGraphicsProfiles/
+Links/
+Music/
+Pictures/
+Videos/
+OneDrive/
+
+# Файлы, относящиеся к IDE и настройкам
+.vscode/
+.arduinoIDE/
+
+# Системные файлы Windows
+.gitconfig
+NTUSER.DAT
