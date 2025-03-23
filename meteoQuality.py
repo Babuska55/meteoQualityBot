@@ -62,7 +62,7 @@ def get_weather(message):
         desc = data["weather"][0]["description"]
         image = get_image_file(desc)
         if image:
-            with open('C:/Users/User/Desktop/ChatBots/MeteoQuality/' + image, 'rb') as file:
+            with open('./' + image, 'rb') as file:
                 bot.send_photo(message.chat.id, file)
         else:
             bot.send_message(message.chat.id, "Не удалось найти фотку!")
