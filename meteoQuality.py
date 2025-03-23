@@ -41,30 +41,38 @@ def get_weather(message):
         bot.reply_to(message, f'Сейчас погода:{temp}°C')
 
         # Картинка
-        def get_image_filename(description):
+        def get_image_file(description):
             description = description.lower()
-            if "ясно" in description or "clear" in description:
-                return "summer.png"
-            elif "дождь" in description or "rain" in description:
-                return "rain.png"
-            elif "облачно" in description or "cloud" in description:
-                return "cloud.png"
-            elif "снег" in description or "snow" in description:
-                return "snow.png"
-            elif "туман" in description or "fog" in description:
-                return "fog.png"
-            else:
-                return "default.png"
+            base_path = "C:\\Users\\User\\Desktop\\ChatBots\\MeteoQuality\\"
 
-        # Потом используем
+            if "ясно" in description or "clear" in description:
+                return open(base_path + 'summer.png', 'rb')
+            elif "дождь" in description or "rain" in description:
+                return open(base_path + 'rain.png', 'rb')
+            elif "облачно" in description or "cloud" in description:
+                return open(base_path + 'cloud.png', 'rb')
+            elif "снег" in description or "snow" in description:
+                return open(base_path + 'snow.png', 'rb')
+            elif "туман" in description or "fog" in description:
+                return open(base_path + 'fog.png', 'rb')
+            else:
+                return None  # если ничего не подошло
+
+        # Используем
         desc = data["weather"][0]["description"]
-        image = get_image_filename(desc)
+        image = get_image_file(desc)
 
         try:
-            file = open(f'C:\\Users\\User\\Desktop\\ChatBots\\MeteoQuality\\{image}', 'rb')
-            bot.send_photo(message.chat.id, file)
-        except FileNotFoundError:
-            bot.send_message(message.chat.id, "Картинка не найдена.")
+            if image:
+                bot.send_photo(message.chat.id, image)
+            else:   
+                bot.send_message(message.chat.id, "Картинка не найдена.")
+        except Exception as e:
+            bot.send_message(message.chat.id, f"Ошибка: {e}")
+        finally:
+            if image:
+                image.close()
+
         
        
 
