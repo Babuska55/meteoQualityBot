@@ -43,40 +43,30 @@ def get_weather(message):
         # Картинка
         def get_image_file(description):
             description = description.lower()
-            base_path = "C:\\Users\\User\\Desktop\\ChatBots\\MeteoQuality\\"
 
-            if "ясно" in description or "clear" in description:
-                return open(base_path + 'summer.png', 'rb')
-            elif "дождь" in description or "rain" in description:
-                return open(base_path + 'rain.png', 'rb')
-            elif "облачно" in description or "cloud" in description:
-                return open(base_path + 'cloud.png', 'rb')
-            elif "снег" in description or "snow" in description:
-                return open(base_path + 'snow.png', 'rb')
-            elif "туман" in description or "fog" in description:
-                return open(base_path + 'fog.png', 'rb')
+            if "clear" in description:
+                return 'summer.png'
+            elif "rain" in description:
+                return 'rain.png'
+            elif "cloudy" in description:
+                return 'cloud.png'
+            elif "snow" in description:
+                return 'snow.png'
+            elif "fog" in description:
+                return 'fog.png'
             else:
-                return None  # если ничего не подошло
+                return None  # if no match found
 
-        # Используем
+
+        # Используем описание погоды для выбора изображения
         desc = data["weather"][0]["description"]
         image = get_image_file(desc)
+        if image:
+            with open('C:/Users/User/Desktop/ChatBots/MeteoQuality/' + image, 'rb') as file:
+                bot.send_photo(message.chat.id, file)
+        else:
+            bot.send_message(message.chat.id, "Не удалось найти фотку!")
 
-        try:
-            if image:
-                bot.send_photo(message.chat.id, image)
-            else:   
-                bot.send_message(message.chat.id, "Картинка не найдена.")
-        except Exception as e:
-            bot.send_message(message.chat.id, f"Ошибка: {e}")
-        finally:
-            if image:
-                image.close()
-
-        
-       
-
-        
         forecast_url = f'https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API}&units=metric&lang=ru'
         forecast_res = requests.get(forecast_url)
 
