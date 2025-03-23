@@ -1,9 +1,0 @@
-services:
-  - type: worker
-    name: meteoQualityBot
-    runtime: python
-    plan: free
-    region: oregon
-    branch: main
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "python meteoQuality.py"
