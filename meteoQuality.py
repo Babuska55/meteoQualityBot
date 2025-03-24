@@ -9,6 +9,7 @@ from collections import defaultdict
 bot=telebot.TeleBot("7863228849:AAFU3bwjvTYPfKgHa1Ihapuyj0hzQUbzGgk")
 API='937ac758fd88de28beb4c24fbdc2fa63'
 
+
 app = Flask(__name__)
 
 def weather_icon(desc):
@@ -31,7 +32,8 @@ def weather_icon(desc):
 @bot.message_handler(commands=['start'])
 
 def start(message):
-    bot.send_message(message.chat.id,'Привет новый пользователь, напииши название города!')
+    bot.send_message(message.chat.id, 'Привет! 👋 Добро пожаловать! 🌟 Напиши название города, чтобы получить актуальные новости о погоде 🌤️.')
+
 
 @bot.message_handler(content_types=['text'])
 def get_weather(message):
@@ -48,11 +50,11 @@ def get_weather(message):
         def get_image_file(description):
             description = description.lower()
 
-            if "clear" in description:
+            if "clear" in description or "sky" in description:
                 return 'summer.png'
             elif "rain" in description:
                 return 'rain.png'
-            elif "cloudy" in description:
+            elif "cloud" in description:
                 return 'cloud.png'
             elif "snow" in description:
                 return 'snow.png'
